@@ -1,0 +1,6 @@
+@zadanie_HostAddress = http://localhost:5119
+
+GET {{zadanie_HostAddress}}/animals/
+Accept: application/json
+
+###
