@@ -1,27 +1,35 @@
 ﻿using zadanie.DTO;
 using zadanie.Models;
+using zadanie.Repositories;
 
 namespace zadanie.Services;
 
 internal class AnimalService : IAnimalService
 {
-    public IList<Animal> GetAnimals()
+    private readonly IAnimalRepository _animalRepository;
+
+    public AnimalService(IAnimalRepository animalRepository)
     {
-        
+        _animalRepository = animalRepository;
     }
 
-    public Animal? GetAnimal(int id)
+    public IList<Animal> GetAnimals(AnimalOrderBy? orderBy)
     {
-        throw new NotImplementedException();
+        return _animalRepository.GetAnimals(orderBy);
     }
 
-    public Animal AddAnimal(AnimalDTO animalDto)
+    public int CreateAnimal(AnimalDTO animal)
     {
-        throw new NotImplementedException();
+        return _animalRepository.CreateAnimal(animal);
     }
 
-    public void DeleteAnimal(int id)
+    public int UpdateAnimal(AnimalDTO animal)
     {
-        throw new NotImplementedException();
+        return _animalRepository.UpdateAnimal(animal);
+    }
+
+    public int DeleteAnimal(int id)
+    {
+        return _animalRepository.DeleteAnimal(id);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Data.SqlClient;
+using zadanie.DTO;
 using zadanie.Models;
 
 namespace zadanie.Repositories;
@@ -13,15 +14,39 @@ public class AnimalRepository : IAnimalRepository
     }
 
 
-    public IList<Animal> GetAnimals(String orderBy = "name")
+    public IList<Animal> GetAnimals(AnimalOrderBy? orderBy)
     {
+        string orderByString;
+        switch(orderBy)
+        {
+            case AnimalOrderBy.Description:
+            {
+                orderByString = "Description";
+                break;
+            }
+            case AnimalOrderBy.Category:
+            {
+                orderByString = "Category";
+                break;
+            }
+            case AnimalOrderBy.Area:
+            {
+                orderByString = "Area";
+                break;
+            }
+            default:
+            {
+                orderByString = "Name";
+                break;            }
+        }
+        
         using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         con.Open();
         
         using var cmd = new SqlCommand();
         cmd.Connection = con;
         cmd.CommandText = "SELECT IdAnimal, Name, Description, Category, Area FROM Animal ORDER BY @OrderBy";
-        cmd.Parameters.AddWithValue("@OrderBy", orderBy);
+        cmd.Parameters.AddWithValue("@OrderBy", orderByString);
         
         var dr = cmd.ExecuteReader();
         var animals = new List<Animal>();
@@ -40,7 +65,7 @@ public class AnimalRepository : IAnimalRepository
         
         return animals;    }
 
-    public int CreateAnimal(Animal animal)
+    public int CreateAnimal(AnimalDTO animal)
     {
         (int id, string name, string description, string category, string area) = animal;
         
@@ -59,7 +84,7 @@ public class AnimalRepository : IAnimalRepository
         var affectedCount = cmd.ExecuteNonQuery();
         return affectedCount;    }
 
-    public int UpdateAnimal(Animal animal)
+    public int UpdateAnimal(AnimalDTO animal)
     {
         (int id, string name, string description, string category, string area) = animal;
         
@@ -86,7 +111,7 @@ public class AnimalRepository : IAnimalRepository
         
         using var cmd = new SqlCommand();
         cmd.Connection = con;
-        cmd.CommandText = "DELETE FROM Animal WHERE IdStudent = @IdAnimal";
+        cmd.CommandText = "DELETE FROM Animal WHERE IdAnimal = @IdAnimal";
         cmd.Parameters.AddWithValue("@IdAnimal", idAnimal);
         
         var affectedCount = cmd.ExecuteNonQuery();

@@ -5,11 +5,10 @@ namespace zadanie.Services;
 
 public interface IAnimalService
 {
-    IList<Animal> GetAnimals();
+    IList<Animal> GetAnimals(AnimalOrderBy? orderBy);
+    
+    int CreateAnimal(AnimalDTO animal);
 
-    Animal? GetAnimal(int id);
-
-    Animal AddAnimal(AnimalDTO animalDto);
-
-    void DeleteAnimal(int id);
+    int UpdateAnimal(AnimalDTO animal);
+    int DeleteAnimal(int id);
 }
