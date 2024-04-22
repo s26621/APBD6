@@ -14,39 +14,16 @@ public class AnimalRepository : IAnimalRepository
     }
 
 
-    public IList<Animal> GetAnimals(AnimalOrderBy? orderBy)
+    public IList<Animal> GetAnimals(string orderBy)
     {
-        string orderByString;
-        switch(orderBy)
-        {
-            case AnimalOrderBy.Description:
-            {
-                orderByString = "Description";
-                break;
-            }
-            case AnimalOrderBy.Category:
-            {
-                orderByString = "Category";
-                break;
-            }
-            case AnimalOrderBy.Area:
-            {
-                orderByString = "Area";
-                break;
-            }
-            default:
-            {
-                orderByString = "Name";
-                break;            }
-        }
+        string orderByString = GetOrderByColumn(orderBy);
         
         using var con = new SqlConnection(_configuration["ConnectionStrings:DefaultConnection"]);
         con.Open();
         
         using var cmd = new SqlCommand();
         cmd.Connection = con;
-        cmd.CommandText = "SELECT IdAnimal, Name, Description, Category, Area FROM Animal ORDER BY @OrderBy";
-        cmd.Parameters.AddWithValue("@OrderBy", orderByString);
+        cmd.CommandText = "SELECT IdAnimal, Name, Description, Category, Area FROM Animal ORDER BY "+orderByString;
         
         var dr = cmd.ExecuteReader();
         var animals = new List<Animal>();
@@ -116,4 +93,27 @@ public class AnimalRepository : IAnimalRepository
         
         var affectedCount = cmd.ExecuteNonQuery();
         return affectedCount;    }
+
+    private string GetOrderByColumn(string val)
+    {
+        switch(val.ToLower())
+        {
+            case "description":
+            {
+                 return "Description";
+            }
+            case "categoty":
+            {
+                return "Category";
+            }
+            case "area":
+            {
+                return "Area";
+            }
+            default:
+            {
+                return "Name";
+            }
+        }
+    }
 }

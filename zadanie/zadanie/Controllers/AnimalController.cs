@@ -17,7 +17,7 @@ public class AnimalController : ControllerBase
     }
 
     [HttpGet]
-    public IActionResult GetAnimals(AnimalOrderBy? orderBy)
+    public IActionResult GetAnimals(string orderBy)
     {
         var animals = _animalService.GetAnimals(orderBy);
         return Ok(animals);

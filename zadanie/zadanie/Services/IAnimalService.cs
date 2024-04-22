@@ -5,7 +5,7 @@ namespace zadanie.Services;
 
 public interface IAnimalService
 {
-    IList<Animal> GetAnimals(AnimalOrderBy? orderBy);
+    IList<Animal> GetAnimals(string orderBy);
     
     int CreateAnimal(AnimalDTO animal);
 

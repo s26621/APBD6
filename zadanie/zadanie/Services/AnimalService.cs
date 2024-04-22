@@ -13,7 +13,7 @@ internal class AnimalService : IAnimalService
         _animalRepository = animalRepository;
     }
 
-    public IList<Animal> GetAnimals(AnimalOrderBy? orderBy)
+    public IList<Animal> GetAnimals(string orderBy)
     {
         return _animalRepository.GetAnimals(orderBy);
     }
